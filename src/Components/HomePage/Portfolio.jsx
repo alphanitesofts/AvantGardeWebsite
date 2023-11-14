@@ -1,5 +1,6 @@
 import React from 'react'
 import SliderComponent from './sliderComponent/SliderComponent';
+import NewArrivals from './NewArrivals';
 
 const Portfolio = () => {
     const slides = [
