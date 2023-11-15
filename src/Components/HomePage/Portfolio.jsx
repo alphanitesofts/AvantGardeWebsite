@@ -1,13 +1,45 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import SliderComponent from './sliderComponent/SliderComponent';
-import NewArrivals from './NewArrivals';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../app/features/categories/categoriesSlice';
 
 const Portfolio = () => {
+    const dispatch = useDispatch();
+    const categories = useSelector(state => state.categories);
+    console.log(categories)
+    useEffect(() => {
+        dispatch(fetchCategories())
+            .then((response) => console.log('API Response:', response))
+            .catch((error) => console.error('Error fetching categories:', error));
+    }, [dispatch]);
+
+    // Check if categories.data is an object
+    let newArrivalsItems;
+    if (categories.isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (categories.isError) {
+        return <div>Error fetching categories</div>;
+    } else if (categories.data.Categorys) {
+        console.log(categories.data.Categorys,"................................")
+        newArrivalsItems = categories.data.Categorys?.map(item => ({
+            id: item.category_id,
+            cat_name: item.cat_name,
+            added_by: item.added_by,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            username: item.username,
+            imageUrl: 'img/product-img/product-1.jpg',
+            link: item.cat_name.toLowerCase().replace(/\s+/g, '-'),
+        }))
+    }
+
     const slides = [
         <div>
             <div className="col-lg-12 single_gallery_item women wow fadeInUpBig" data-wow-delay="0.2s">
                 <div className="product-img">
-                    <img src="img/product-img/product-1.jpg" alt />
+                    <img src="img/product-img/product-1.jpg" alt="" />
                     <div className="product-quicview">
                         <a href="/Quickview" data-toggle="modal" data-target="#quickview"><i className="ti-plus" /></a>
                     </div>
@@ -164,7 +196,11 @@ const Portfolio = () => {
     ];
     return (
         <>
-            <SliderComponent sectionTitle="Hoddies" slides={slides} />
+        {
+        newArrivalsItems.map((category, index) => (
+            <SliderComponent key={index} sectionTitle={category.cat_name} slides={slides} />
+        ))}
+            {/* <SliderComponent sectionTitle="Hoddies" slides={slides} />
             <SliderComponent sectionTitle="Jogger Pants" slides={slides} />
             <SliderComponent sectionTitle="Sweatshirt" slides={slides} />
             <SliderComponent sectionTitle="Corduroy Shirts" slides={slides} />
@@ -177,7 +213,7 @@ const Portfolio = () => {
             <SliderComponent sectionTitle="Shorts" slides={slides} />
             <SliderComponent sectionTitle="Jeans" slides={slides} />
             <SliderComponent sectionTitle="Utility Cargos" slides={slides} />
-            <SliderComponent sectionTitle="Premium Chinos" slides={slides} />
+            <SliderComponent sectionTitle="Premium Chinos" slides={slides} /> */}
         </>
         // <div>
         //     <section className="">

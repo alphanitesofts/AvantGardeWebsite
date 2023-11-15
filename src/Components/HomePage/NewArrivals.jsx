@@ -122,11 +122,42 @@
 // }
 
 // export default NewArrivals
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../app/features/categories/categoriesSlice';
 
-const NewArrivals = ({ items }) => {
+const NewArrivals = () => {
+    const dispatch = useDispatch();
+    const categories = useSelector(state => state.categories);
+
+    useEffect(() => {
+        dispatch(fetchCategories())
+            .then((response) => console.log('API Response:', response))
+            .catch((error) => console.error('Error fetching categories:', error));
+    }, [dispatch]);
+
+    // Check if categories.data is an object
+    let newArrivalsItems ;
+    if (categories.isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (categories.isError) {
+        return <div>Error fetching categories</div>;
+    } else if (categories.data) {
+        console.log(categories.data.Categorys, "errror")
+        newArrivalsItems = categories.data.Categorys.map(item => ({
+            id: item.category_id,
+            cat_name: item.cat_name,
+            added_by: item.added_by,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            username: item.username,
+            imageUrl: 'img/product-img/product-1.jpg',
+            link: item.cat_name.toLowerCase().replace(/\s+/g, '-'),
+        }))
+    }
     return (
         <div>
             <section className="new_arrivals_area section_padding_100_0 clearfix">
@@ -141,14 +172,14 @@ const NewArrivals = ({ items }) => {
                 </div>
                 <div className="container">
                     <div className="row karl-new-arrivals">
-                        {items.map((item, index) => (
+                        {newArrivalsItems.map((item, index) => (
                             <div key={index} className="col-five single_gallery_item women wow fadeInUpBig" data-wow-delay={`0.${index + 1}s`}>
                                 <Link to={`/categories/${item.link}`}>
                                     <div className="product-img">
-                                        <img src={item.imageUrl} alt={item.category} />
+                                        <img src={item.imageUrl} alt={item.cat_name} />
                                     </div>
                                     <div className="product-description d-flex justify-content-between">
-                                        <h3 style={{ fontFamily: "Futura sans-serif", fontSize: "1.3rem" }}>{item.category}</h3>
+                                        <h3 style={{ fontFamily: "Futura sans-serif", fontSize: "1.3rem" }}>{item.cat_name}</h3>
                                         <i style={{ fontSize: "1.3rem" }} className="ti-arrow-right"></i>
                                     </div>
                                 </Link>
