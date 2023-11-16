@@ -1,20 +1,20 @@
-// import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-// const addToCartSlice = createSlice({
-//   name: "addToCart",
-//   initialState: {
-//     cart: [],
-//   },
-//   reducers: {
-//     addItem: (state, action) => {
-//       const newItem = action.payload;
-//       state.cart.push(newItem);
-//     },
-//     // You can add more reducers for removing items, updating quantities, etc.
-//   },
-// });
+const addToCartSlice = createSlice({
+  name: "addToCart",
+  initialState: {
+    cart: [],
+  },
+  reducers: {
+    addItem: (state, action) => {
+      const newItem = action.payload;
+      state.cart.push(newItem);
+    },
+    
+  },
+});
 
-// export const { addItem } = addToCartSlice.actions;
+export const { addItem } = addToCartSlice.actions;
 
 // export default addToCartSlice.reducer;
 

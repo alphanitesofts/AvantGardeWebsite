@@ -1,11 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useGetSubCategoriesQuery } from '../features/sub_categories/subCategoriesSlice'
+
 
 const Navbar = () => {
-
+    const { data, error, isLoading } = useGetSubCategoriesQuery(1)
+    console.log(data, "data .???")
     return (
         <div>
-
             <header className="header_area bg-img background-overlay-white" style={{ backgroundImage: 'url(img/bg-img/bg-1.jpg)', borderBottom: '0.5px solid #000' }}>
                 <div className="top_header_area">
                     <div className="container h-100">
@@ -42,8 +44,9 @@ const Navbar = () => {
                                         <div className="collapse navbar-collapse align-items-start collapse" id="karl-navbar">
                                             <ul className="navbar-nav animated" id="nav">
                                                 <li className="nav-item active"><Link className="nav-link" to='/'>Home</Link></li>
+                                                <li className="nav-item active"><Link className="nav-link" to='#'>New Arrivals</Link></li>
                                                 <li className="nav-item dropdown">
-                                                    <a className="nav-link dropdown-toggle" href="#" id="karlDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                                    <a className="nav-link dropdown-toggle" href="#" id="karlDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Top</a>
                                                     <div className="dropdown-menu" aria-labelledby="karlDropdown">
                                                         <Link className="dropdown-item" to='/'>Home</Link>
                                                         <Link className="dropdown-item" to='/Shop-now'>Shop</Link>

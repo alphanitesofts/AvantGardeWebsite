@@ -1,29 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import SliderComponent from './sliderComponent/SliderComponent';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../app/features/categories/categoriesSlice';
+import { useGetCategoriesQuery } from '../features/categories/categoriesSlice';
 
 const Portfolio = () => {
-    const dispatch = useDispatch();
-    const categories = useSelector(state => state.categories);
-    console.log(categories)
-    useEffect(() => {
-        dispatch(fetchCategories())
-            .then((response) => console.log('API Response:', response))
-            .catch((error) => console.error('Error fetching categories:', error));
-    }, [dispatch]);
-
-    // Check if categories.data is an object
+    const { data, isError, isLoading } = useGetCategoriesQuery();
     let newArrivalsItems;
-    if (categories.isLoading) {
+    if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    if (categories.isError) {
+    if (isError) {
         return <div>Error fetching categories</div>;
-    } else if (categories.data.Categorys) {
-        console.log(categories.data.Categorys,"................................")
-        newArrivalsItems = categories.data.Categorys?.map(item => ({
+    } else if (data) {
+        newArrivalsItems = data.map(item => ({
             id: item.category_id,
             cat_name: item.cat_name,
             added_by: item.added_by,
@@ -196,10 +185,10 @@ const Portfolio = () => {
     ];
     return (
         <>
-        {
-        newArrivalsItems.map((category, index) => (
-            <SliderComponent key={index} sectionTitle={category.cat_name} slides={slides} />
-        ))}
+            {
+                newArrivalsItems.map((category, index) => (
+                    <SliderComponent key={index} sectionTitle={category.cat_name} slides={slides} />
+                ))}
             {/* <SliderComponent sectionTitle="Hoddies" slides={slides} />
             <SliderComponent sectionTitle="Jogger Pants" slides={slides} />
             <SliderComponent sectionTitle="Sweatshirt" slides={slides} />

@@ -122,32 +122,25 @@
 // }
 
 // export default NewArrivals
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../app/features/categories/categoriesSlice';
+import { useGetCategoriesQuery } from '../features/categories/categoriesSlice';
 
 const NewArrivals = () => {
-    const dispatch = useDispatch();
-    const categories = useSelector(state => state.categories);
-
-    useEffect(() => {
-        dispatch(fetchCategories())
-            .then((response) => console.log('API Response:', response))
-            .catch((error) => console.error('Error fetching categories:', error));
-    }, [dispatch]);
-
-    // Check if categories.data is an object
-    let newArrivalsItems ;
-    if (categories.isLoading) {
+    const { data, isError, isLoading } = useGetCategoriesQuery();
+    console.log('Data:', data);
+    console.log('Is Loading:', isLoading);
+    console.log('Error:', isError);
+    let newArrivalsItems;
+    if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    if (categories.isError) {
+    if (isError) {
         return <div>Error fetching categories</div>;
-    } else if (categories.data) {
-        console.log(categories.data.Categorys, "errror")
-        newArrivalsItems = categories.data.Categorys.map(item => ({
+    } else if (data) {
+        console.log(data, "errror")
+        newArrivalsItems = data.map(item => ({
             id: item.category_id,
             cat_name: item.cat_name,
             added_by: item.added_by,
