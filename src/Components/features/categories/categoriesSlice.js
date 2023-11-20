@@ -8,7 +8,7 @@ export const categoriesApi = createApi({
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: () => ({
-        url:"/fetch_all_categorys",
+        url:"/get_categorys_name_and_id",
         method:'POST'
       }),
       transformResponse: (response) => {

@@ -1,12 +1,16 @@
 import React from 'react'
+const imageUrl = 'https://avantgardeimages.alphanitesofts.net/'
 
 const SingleProduct = () => {
+  let productData = localStorage.getItem('product');
+  let { item: product } = productData ? JSON.parse(productData) : { item: null };
+  console.log(product, "product data")
   return (
     <div>
       <div>
         <div className="breadcumb_area pt-5">
           <div className="container">
-            <div className="row">
+            {/* <div className="row">
               <div className="col-12">
                 <ol className="breadcrumb d-flex align-items-center">
                   <li className="breadcrumb-item"><a href="#">Home</a></li>
@@ -15,54 +19,86 @@ const SingleProduct = () => {
                 </ol>
                 <a href="#" className="backToHome d-block"><i className="fa fa-angle-double-left" /> Back to Category</a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <section className="single_product_details_area section_padding_0_100">
           <div className="container">
             <div className="row">
               <div className="col-12 col-md-6">
-                <div className="single_product_thumb">
-                  <div id="product_details_slider" className="carousel slide" data-ride="carousel">
-                    <ol className="carousel-indicators">
-                      <li className="active" data-target="#product_details_slider" data-slide-to={0} style={{ backgroundImage: 'url(img/product-img/product-2.jpg)' }}>
-                      </li>
-                      <li data-target="#product_details_slider" data-slide-to={1} style={{ backgroundImage: 'url(img/product-img/product-2.jpg)' }}>
-                      </li>
-                      <li data-target="#product_details_slider" data-slide-to={2} style={{ backgroundImage: 'url(img/product-img/product-3.jpg)' }}>
-                      </li>
-                      <li data-target="#product_details_slider" data-slide-to={3} style={{ backgroundImage: 'url(img/product-img/product-4.jpg)' }}>
-                      </li>
-                    </ol>
-                    <div className="carousel-inner">
-                      <div className="carousel-item active">
-                        <a className="gallery_img" href="img/product-img/product-9.jpg">
-                          <img className="d-block w-100" src="img/product-img/product-4.jpg" alt="First slide" />
-                        </a>
-                      </div>
-                      <div className="carousel-item">
-                        <a className="gallery_img" href="img/product-img/product-2.jpg">
-                          <img className="d-block w-100" src="img/product-img/product-2.jpg" alt="Second slide" />
-                        </a>
-                      </div>
-                      <div className="carousel-item">
-                        <a className="gallery_img" href="img/product-img/product-3.jpg">
-                          <img className="d-block w-100" src="img/product-img/product-3.jpg" alt="Third slide" />
-                        </a>
-                      </div>
-                      <div className="carousel-item">
-                        <a className="gallery_img" href="img/product-img/product-4.jpg">
-                          <img className="d-block w-100" src="img/product-img/product-4.jpg" alt="Fourth slide" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <div className="single_product_thumb">
+    <div id="product_details_slider" className="carousel slide" data-ride="carousel">
+      <ol className="carousel-indicators">
+        {product.image && product.image.length > 0 ? (
+          product.image.map((pic, index) => (
+            <li
+              key={index}
+              className={index === 0 ? 'active' : ''}
+              data-target="#product_details_slider"
+              data-slide-to={index}
+            />
+          ))
+        ) : (
+          <>
+            <li
+              data-target="#product_details_slider"
+              data-slide-to={0}
+              className="active"
+              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533)' }}
+            />
+            <li
+              data-target="#product_details_slider"
+              data-slide-to={1}
+              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585)' }}
+            />
+            <li
+              data-target="#product_details_slider"
+              data-slide-to={2}
+              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585)' }}
+            />
+          </>
+        )}
+      </ol>
+      <div className="carousel-inner">
+        {product.image && product.image.length > 0 ? (
+          product.image.map((pic, index) => (
+            <div
+              key={index}
+              className={`carousel-item${index === 0 ? ' active' : ''}`}
+            >
+              <a className="gallery_img" href={`${imageUrl}${pic}`}>
+                <img className="d-block w-100" src={`${imageUrl}${pic}`} alt={`Slide ${index + 1}`} />
+              </a>
+            </div>
+          ))
+        ) : (
+          <>
+            <div className="carousel-item active">
+              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533">
+                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533" alt="Fallback Slide 1" />
+              </a>
+            </div>
+            <div className="carousel-item">
+              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585">
+                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 2" />
+              </a>
+            </div>
+            <div className="carousel-item">
+              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585">
+                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 3" />
+              </a>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
               <div className="col-12 col-md-6">
                 <div className="single_product_desc">
-                  <h4 className="title"><a href="#">Long Yellow Dress</a></h4>
-                  <h4 className="price">$ 39.99</h4>
+                  <h4 className="title"><a href="#">{product.cat_name}</a></h4>
+                  <h4 className="price">{product.price}</h4>
                   <p className="available">Available: <span className="text-muted">In Stock</span></p>
                   <div className="single_product_ratings mb-15">
                     <i className="fa fa-star" aria-hidden="true" />
@@ -73,14 +109,17 @@ const SingleProduct = () => {
                   </div>
                   <div className="widget size mb-50">
                     <h6 className="widget-title">Size</h6>
-                    <div className="widget-desc">
-                      <ul>
-                        <li><a href="#">32</a></li>
-                        <li><a href="#">34</a></li>
+                    <div >
+                      <ul className='d-flex'>
+                        {product?.sub_datas.map((item => (
+                          <li className='border border-dark rounded py-1 px-2 mx-2'><a href="#">{item.size}</a></li>
+                        )))}
+
+                        {/* <li><a href="#">34</a></li>
                         <li><a href="#">36</a></li>
                         <li><a href="#">38</a></li>
                         <li><a href="#">40</a></li>
-                        <li><a href="#">42</a></li>
+                        <li><a href="#">42</a></li> */}
                       </ul>
                     </div>
                   </div>
@@ -102,22 +141,25 @@ const SingleProduct = () => {
                       </div>
                       <div id="collapseOne" className="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                         <div className="card-body">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales. Phasellus sagittis auctor gravida. Integ er bibendum sodales arcu id te mpus. Ut consectetur lacus.</p>
+                          <p>{product.description ? product.description : "No Description"}</p>
                           <p>Approx length 66cm/26" (Based on a UK size 8 sample) Mixed fibres</p>
                           <p>The Model wears a UK size 8/ EU size 36/ US size 4 and her height is 5'8"</p>
+                          <span>
+                            <img src={`${imageUrl}${product?.size_chart_img}`} />
+                          </span>
                         </div>
                       </div>
                     </div>
                     <div className="card">
                       <div className="card-header" role="tab" id="headingTwo">
                         <h6 className="mb-0">
-                          <a className="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Cart Details</a>
+                          <a className="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Materials</a>
                         </h6>
                       </div>
                       <div id="collapseTwo" className="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div className="card-body">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quis in veritatis officia inventore, tempore provident dignissimos nemo, nulla quaerat. Quibusdam non, eos, voluptatem reprehenderit hic nam! Laboriosam, sapiente! Praesentium.</p>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia magnam laborum eaque.</p>
+                          <p>{product?.material}</p>
+                          {/* <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia magnam laborum eaque.</p> */}
                         </div>
                       </div>
                     </div>
@@ -129,8 +171,8 @@ const SingleProduct = () => {
                       </div>
                       <div id="collapseThree" className="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                         <div className="card-body">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse quo sint repudiandae suscipit ab soluta delectus voluptate, vero vitae, tempore maxime rerum iste dolorem mollitia perferendis distinctio. Quibusdam laboriosam rerum distinctio. Repudiandae fugit odit, sequi id!</p>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae qui maxime consequatur laudantium temporibus ad et. A optio inventore deleniti ipsa.</p>
+                          <p>7 Days return or exchange if the tag is not removed</p>
+                          {/* <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae qui maxime consequatur laudantium temporibus ad et. A optio inventore deleniti ipsa.</p> */}
                         </div>
                       </div>
                     </div>
