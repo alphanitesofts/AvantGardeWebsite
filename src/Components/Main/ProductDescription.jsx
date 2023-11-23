@@ -2,9 +2,11 @@ import React from 'react'
 import SingleProduct from '../ProductDetails/SingleProduct'
 import RelatedProducts from '../ProductDetails/RelatedProducts'
 import DiscountArea from '../HomePage/DiscountArea'
-import { Link, useParams,useLocation } from 'react-router-dom';
+import { Link, useParams} from 'react-router-dom';
 const ProductDescription = () => {
-    const location = useLocation();
+    const params = useParams();
+    let {productId}=params;
+    console.log(productId,"abcd id")
     return (
         <div>
             {/* <DiscountArea /> */}

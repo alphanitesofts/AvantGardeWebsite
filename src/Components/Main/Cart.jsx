@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DiscountArea from '../HomePage/DiscountArea'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { addItem, clearCart, decreaseCart, getTotals, removeFromCart } from '../features/addToCart/addToCartSlice';
+const imageUrl = 'https://avantgardeimages.alphanitesofts.net/';
 const Cart = () => {
+    const dispatch = useDispatch()
+    const cart = useSelector((state) => state.addToCart);
+    console.log(cart, "cart item")
+    useEffect(() => {
+        dispatch(getTotals());
+    }, [cart, dispatch]);
+
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product));
+    };
+    const handleDecreaseCart = (product) => {
+        dispatch(decreaseCart(product));
+    };
+    const handleRemoveFromCart = (product) => {
+        dispatch(removeFromCart(product));
+    };
+    const handleClearCart = () => {
+        dispatch(clearCart());
+    };
     return (
         <div>
             <DiscountArea />
-            
             <div className="cart_area section_padding_100 clearfix">
                 <div className="container">
                     <div className="row">
@@ -21,7 +41,35 @@ const Cart = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {cart && cart?.cartItems.map(item => {
+                                            return <tr key={item.id}>
+                                                <td className="cart_product_img d-flex align-items-center">
+                                                    {item.image != null ?(
+                                                     <a href="#">
+                                                     <img src={`${imageUrl}${item.image?.[0]}`} alt="Product" /></a>
+                                                    )
+                                                    :(
+                                                         <a href="#">
+                                                        <img src="img/product-img/product-9.jpg" alt="Product" /></a>
+                                                    )
+                                                    }
+                                                   <h6>{item.sub_cat_name}</h6>
+                                                </td>
+                                                <td className="price"><span>{item.price}</span></td>
+                                                <td className="qty">
+                                                    <div className="quantity">
+                                                        <span className="qty-minus"
+                                                            onClick={() => handleDecreaseCart(item)}>
+                                                            <i className="fa fa-minus" aria-hidden="true" /></span>
+                                                        <input type="number" className="qty-text" id="qty" step={1} min={1} max={99} name="quantity" value={item.cartQuantity} readOnly />
+                                                        <span className="qty-plus"
+                                                            onClick={() => handleAddToCart(item)}><i className="fa fa-plus" aria-hidden="true" /></span>
+                                                    </div>
+                                                </td>
+                                                <td className="total_price"><span>${item.price * item.cartQuantity}</span></td>
+                                            </tr>
+                                        })}
+                                        {/* <tr>
                                             <td className="cart_product_img d-flex align-items-center">
                                                 <a href="#"><img src="img/product-img/product-9.jpg" alt="Product" /></a>
                                                 <h6>Yellow Cocktail Dress</h6>
@@ -35,7 +83,7 @@ const Cart = () => {
                                                 </div>
                                             </td>
                                             <td className="total_price"><span>$49.88</span></td>
-                                        </tr>
+                                        </tr> */}
                                     </tbody>
                                 </table>
                             </div>
@@ -44,15 +92,15 @@ const Cart = () => {
                                     <a href="shop-grid-left-sidebar.html">Continue shooping</a>
                                 </div>
                                 <div className="update-checkout w-50 text-right">
-                                    <a href="#">clear cart</a>
-                                    <a href="#">Update cart</a>
+                                    <a onClick={() => handleClearCart()}>clear cart</a>
+                                    {/* <a href="#" >Update cart</a> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-md-6 col-lg-4">
-                            <div className="coupon-code-area mt-70">
+                            {/* <div className="coupon-code-area mt-70">
                                 <div className="cart-page-heading">
                                     <h5>Cupon code</h5>
                                     <p>Enter your cupone code</p>
@@ -61,10 +109,10 @@ const Cart = () => {
                                     <input type="search" name="search" placeholder="#569ab15" />
                                     <button type="submit">Apply</button>
                                 </form>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="col-12 col-md-6 col-lg-4">
-                            <div className="shipping-method-area mt-70">
+                            {/* <div className="shipping-method-area mt-70">
                                 <div className="cart-page-heading">
                                     <h5>Shipping method</h5>
                                     <p>Select the one you want</p>
@@ -81,18 +129,18 @@ const Cart = () => {
                                     <input type="radio" id="customRadio3" name="customRadio" className="custom-control-input" />
                                     <label className="custom-control-label d-flex align-items-center justify-content-between" htmlFor="customRadio3"><span>Personal Pickup</span><span>Free</span></label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="col-12 col-lg-4">
-                            <div className="cart-total-area mt-70">
+                            <div className="cart-total-area mt-70 ">
                                 <div className="cart-page-heading">
                                     <h5>Cart total</h5>
                                     <p>Final info</p>
                                 </div>
-                                <ul className="cart-total-chart">
-                                    <li><span>Subtotal</span> <span>$59.90</span></li>
-                                    <li><span>Shipping</span> <span>Free</span></li>
-                                    <li><span><strong>Total</strong></span> <span><strong>$59.90</strong></span></li>
+                                <ul className="cart-total-chart ">
+                                    <li><span>Subtotal</span> <span>${cart.cartTotalAmount}</span></li>
+                                    {/* <li><span>Shipping</span> <span>Free</span></li>
+                                    <li><span><strong>Total</strong></span> <span><strong></strong></span></li> */}
                                 </ul>
                                 <a href="checkout.html" className="btn karl-checkout-btn">Proceed to checkout</a>
                             </div>

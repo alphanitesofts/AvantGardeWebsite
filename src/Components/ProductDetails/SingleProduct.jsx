@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+import { useGetsingleArticleQuery } from '../features/articles/getArticlesApi';
+import { useParams } from 'react-router-dom';
 const imageUrl = 'https://avantgardeimages.alphanitesofts.net/'
 
 const SingleProduct = () => {
-  let productData = localStorage.getItem('product');
-  let { item: product } = productData ? JSON.parse(productData) : { item: null };
-  console.log(product, "product data")
+  const { productId } = useParams();
+  let { data, isError, isLoading } = useGetsingleArticleQuery(productId)
+  console.log(data, "single article")
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError || !data) {
+    return <p>Error loading data</p>;
+  }
+
   return (
     <div>
       <div>
@@ -26,79 +37,80 @@ const SingleProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12 col-md-6">
-  <div className="single_product_thumb">
-    <div id="product_details_slider" className="carousel slide" data-ride="carousel">
-      <ol className="carousel-indicators">
-        {product.image && product.image.length > 0 ? (
-          product.image.map((pic, index) => (
-            <li
-              key={index}
-              className={index === 0 ? 'active' : ''}
-              data-target="#product_details_slider"
-              data-slide-to={index}
-            />
-          ))
-        ) : (
-          <>
-            <li
-              data-target="#product_details_slider"
-              data-slide-to={0}
-              className="active"
-              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533)' }}
-            />
-            <li
-              data-target="#product_details_slider"
-              data-slide-to={1}
-              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585)' }}
-            />
-            <li
-              data-target="#product_details_slider"
-              data-slide-to={2}
-              style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585)' }}
-            />
-          </>
-        )}
-      </ol>
-      <div className="carousel-inner">
-        {product.image && product.image.length > 0 ? (
-          product.image.map((pic, index) => (
-            <div
-              key={index}
-              className={`carousel-item${index === 0 ? ' active' : ''}`}
-            >
-              <a className="gallery_img" href={`${imageUrl}${pic}`}>
-                <img className="d-block w-100" src={`${imageUrl}${pic}`} alt={`Slide ${index + 1}`} />
-              </a>
-            </div>
-          ))
-        ) : (
-          <>
-            <div className="carousel-item active">
-              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533">
-                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533" alt="Fallback Slide 1" />
-              </a>
-            </div>
-            <div className="carousel-item">
-              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585">
-                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 2" />
-              </a>
-            </div>
-            <div className="carousel-item">
-              <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585">
-                <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 3" />
-              </a>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  </div>
-</div>
+                <div className="single_product_thumb">
+                  <div id="product_details_slider" className="carousel slide" data-ride="carousel">
+                    <ol className="carousel-indicators">
+                      {data?.data.image && data?.data.image.length > 0 ? (
+                        data?.data.image.map((pic, index) => (
+                          <li
+                            key={index}
+                            className={index === 0 ? 'active' : ''}
+                            data-target="#product_details_slider"
+                            data-slide-to={index}
+                            style={{ backgroundImage: `url(${imageUrl}${pic})` }}
+                          />
+                        ))
+                      ) : (
+                        <>
+                          <li
+                            data-target="#product_details_slider"
+                            data-slide-to={0}
+                            className="active"
+                            style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533)' }}
+                          />
+                          <li
+                            data-target="#product_details_slider"
+                            data-slide-to={1}
+                            style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585)' }}
+                          />
+                          <li
+                            data-target="#product_details_slider"
+                            data-slide-to={2}
+                            style={{ backgroundImage: 'url(https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585)' }}
+                          />
+                        </>
+                      )}
+                    </ol>
+                    <div className="carousel-inner">
+                      {data?.data.image && data?.data.image.length > 0 ? (
+                        data?.data.image.map((pic, index) => (
+                          <div
+                            key={index}
+                            className={`carousel-item${index === 0 ? ' active' : ''}`}
+                          >
+                            <a className="gallery_img" href={`${imageUrl}${pic}`}>
+                              <img className="d-block w-100" src={`${imageUrl}${pic}`} alt={`Slide ${index + 1}`} />
+                            </a>
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          <div className="carousel-item active">
+                            <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533">
+                              <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06674copy2-MIN-website.jpg?v=1698835585&width=533" alt="Fallback Slide 1" />
+                            </a>
+                          </div>
+                          <div className="carousel-item">
+                            <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585">
+                              <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06709copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 2" />
+                            </a>
+                          </div>
+                          <div className="carousel-item">
+                            <a className="gallery_img" href="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585">
+                              <img className="d-block w-100" src="https://avantgardeoriginal.com/cdn/shop/files/DSC06689copy2-MIN.jpg?v=1698835585" alt="Fallback Slide 3" />
+                            </a>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div className="col-12 col-md-6">
                 <div className="single_product_desc">
-                  <h4 className="title"><a href="#">{product.cat_name}</a></h4>
-                  <h4 className="price">{product.price}</h4>
+                  <h4 className="title"><a href="#">{data?.data.cat_name}</a></h4>
+                  <h4 className="price">{data?.data.price}</h4>
                   <p className="available">Available: <span className="text-muted">In Stock</span></p>
                   <div className="single_product_ratings mb-15">
                     <i className="fa fa-star" aria-hidden="true" />
@@ -111,7 +123,7 @@ const SingleProduct = () => {
                     <h6 className="widget-title">Size</h6>
                     <div >
                       <ul className='d-flex'>
-                        {product?.sub_datas.map((item => (
+                        {data.data?.sub_datas.map((item => (
                           <li className='border border-dark rounded py-1 px-2 mx-2'><a href="#">{item.size}</a></li>
                         )))}
 
@@ -141,11 +153,11 @@ const SingleProduct = () => {
                       </div>
                       <div id="collapseOne" className="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                         <div className="card-body">
-                          <p>{product.description ? product.description : "No Description"}</p>
+                          <p>{data.data.description ? data.data.description : "No Description"}</p>
                           <p>Approx length 66cm/26" (Based on a UK size 8 sample) Mixed fibres</p>
                           <p>The Model wears a UK size 8/ EU size 36/ US size 4 and her height is 5'8"</p>
                           <span>
-                            <img src={`${imageUrl}${product?.size_chart_img}`} />
+                            <img src={`${imageUrl}${data.data.size_chart_img}`} />
                           </span>
                         </div>
                       </div>
@@ -158,7 +170,7 @@ const SingleProduct = () => {
                       </div>
                       <div id="collapseTwo" className="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div className="card-body">
-                          <p>{product?.material}</p>
+                          <p>{data.data?.material}</p>
                           {/* <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia magnam laborum eaque.</p> */}
                         </div>
                       </div>

@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 // Body
 import Footer from "./Components/Body/Footer";
@@ -23,7 +23,7 @@ function App() {
         <Router>
           <Navbar />
           <Routes>
-            <Route path="/Login" element={<Login />} />
+            <Route path="/Login" element={<Login />} />                                                                                                                       
             <Route path="/" element={<Homepage />} />
             <Route path="/Shop-now" element={<ShopNow />} />
             <Route path="/Product-description/:productId" element={<ProductDescription />} />

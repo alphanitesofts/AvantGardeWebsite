@@ -3,44 +3,31 @@ import React from 'react';
 import Slider from 'react-slick';
 import { useGetArticlesQuery } from '../../features/articles/getArticlesApi';
 import { Link, useNavigate } from 'react-router-dom';
-const imageUrl='https://avantgardeimages.alphanitesofts.net/'
-const SliderComponent = ({ id, sectionTitle }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem,updateQuantity } from '../../features/addToCart/addToCartSlice';
+const imageUrl = 'https://avantgardeimages.alphanitesofts.net/';
 
+
+
+const SliderComponent = ({ id }) => {
     const navigate = useNavigate();
-    console.log(id, 'key')
+    const dispatch = useDispatch();
+
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product));
+        console.log("cart button chal raha hai");
+    };
     const { data: articlesData, isError: articlesError, isLoading: articlesLoading } = useGetArticlesQuery(id);
-    console.log(articlesData, 'articles data at id 1.................');
     let articles;
     let slides = [];
     const handleProductClick = (item) => {
-        console.log(item.sub_categorys_id, 'id........')
         // Navigate to the product description page with the corresponding product data
-        navigate(`/product-description/${item.sub_categorys_id}`);
-        localStorage.setItem("product", JSON.stringify({item})
-            // JSON.stringify({
-            //     sub_categorys_id: item.sub_categorys_id,
-            //     name: item.cat_name,
-            //     price: item.price,
-            //     image: item.image,
-            //     category_id: item.category_id,
-            //     quantity: item.quantity,
-            //     discount: item.discount,
-            //     description: item.description,
-            //     size: item.size,
-            //     color: item.color,
-            //     type: item.type,
-            //     status: item.status,
-            //     createdAt: item.createdAt,
-            //     is_live:item.is_live,
-            //     on_sale:item.on_sale,
-            //     size_chart_img:item.size_chart_img,
-            //     sub_cat_name:item.sub_cat_name
-            //     })
-        )
-        console.log(item, 'item data')
+        navigate(`/product-description/${item.id}`);
     };
+    let sectionTitle // Provide a default title
     if (articlesData) {
         articles = articlesData.data.filter((item) => item.sub_categorys_id === id);
+        sectionTitle = articles[0].cat_name ? articles[0].cat_name : sectionTitle;
 
         // Populate slides only if articles is defined
         if (articles) {
@@ -48,9 +35,9 @@ const SliderComponent = ({ id, sectionTitle }) => {
                 <div key={item.sub_categorys_id}>
                     <div className="col-lg-12 single_gallery_item women wow fadeInUpBig" data-wow-delay="0.2s">
                         <div className="product-img">
-                            {item.image !=null?(
-                            <img src={`${imageUrl}${item.image?.[0]}`} alt=""style={{height:"320px"}} />):(
-                                <img src="img/product-img/product-1.jpg" alt="" style={{height:"320px"}}/>
+                            {item.image != null ? (
+                                <img src={`${imageUrl}${item.image?.[0]}`} alt="" style={{ height: "320px" }} />) : (
+                                <img src="img/product-img/product-1.jpg" alt="" style={{ height: "320px" }} />
                             )}
                             <div className="product-quicview">
                                 <a href="/Quickview" data-toggle="modal" data-target="#quickview"><i className="ti-plus" /></a>
@@ -58,7 +45,7 @@ const SliderComponent = ({ id, sectionTitle }) => {
                         </div>
                         <div className="product-description">
                             <Link to={`/product-description/${item.id}`} onClick={() => handleProductClick(item)}>
-                                <p>{item.cat_name}</p>
+                                <p>{item.sub_cat_name}</p>
                             </Link>
                             <div className='d-flex align-items-center'>
                                 <i className='fa-solid fa-star' />
@@ -72,7 +59,9 @@ const SliderComponent = ({ id, sectionTitle }) => {
                                 <span className='product-price-line' style={{ textDecoration: 'line-through' }}>$39.90</span>
                                 <h4 className="product-price" style={{ fontSize: '19px' }}>&nbsp; $39.90</h4>
                             </div>
-                            <a href="/Cart" className="add-to-cart-btn" style={{ marginTop: '20px' }}>ADD TO CART</a>
+                            <a className="add-to-cart-btn" style={{ marginTop: '20px' }}
+                                onClick={
+                                    () => handleAddToCart(item)}>ADD TO CART</a>
                         </div>
                     </div>
                 </div>
@@ -84,7 +73,7 @@ const SliderComponent = ({ id, sectionTitle }) => {
         dots: true,
         infinite: true,
         speed: 900,
-        slidesToShow: Math.min(5, articles ? articles.length : 0),
+        slidesToShow: Math.min(4, articles ? articles.length : 0),
         variableWidth: slides.length < 5 ? true : false,
         slidesToScroll: 1,
         autoplay: true,
@@ -94,7 +83,7 @@ const SliderComponent = ({ id, sectionTitle }) => {
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: Math.min(5, articles ? articles.length : 0),
+                    slidesToShow: Math.min(4, articles ? articles.length : 0),
                     slidesToScroll: Math.min(3, articles ? articles.length : 0),
                     infinite: true,
                     dots: true,

@@ -14,7 +14,17 @@ export const articlesApi = createApi({
                 console.log(response.articles,"response articles");
                 return response;
             }
+        }),
+        getsingleArticle:builder.query({
+            query:(articleId)=>({
+                url:`/get_articles_by_id/${articleId}`,
+                method:"POST"
+            }),
+            transformResponse:(response) => {
+                console.log(response.data,"response single article");
+                return response;
+            }
         })
     })
 })
-export const {useGetArticlesQuery}=articlesApi
+export const {useGetArticlesQuery, useGetsingleArticleQuery}=articlesApi;

@@ -2,8 +2,9 @@ import React from 'react';
 import SliderComponent from './sliderComponent/SliderComponent';
 import { useGetCategoriesQuery } from '../features/categories/categoriesSlice';
 import { useGetSubCategoriesQuery } from '../features/sub_categories/subCategoriesSlice'
+import { useGetArticlesQuery } from '../features/articles/getArticlesApi';
 const Portfolio = () => {
-
+    
     const { data: subCategoriesData, isError: subCategoriesError, isLoading: subCategoriesLoading } = useGetSubCategoriesQuery();
     console.log(subCategoriesData, "subcategories data......");
     
