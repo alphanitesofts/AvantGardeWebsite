@@ -28,7 +28,7 @@ function App() {
             <Route path="/Shop-now" element={<ShopNow />} />
             <Route path="/Product-description/:productId" element={<ProductDescription />} />
             <Route path="/Cart" element={<Cart />} />
-            <Route path="/ProductDetails" element={<ItemForm />} />
+            <Route path="/checkout" element={<ItemForm />} />
             <Route path="/Quickview" element={<ItemInfo />} />
             {/* product category */}
             <Route path={`categories/:category`} element={<Categories />} />

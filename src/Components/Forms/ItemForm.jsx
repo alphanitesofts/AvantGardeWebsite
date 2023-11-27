@@ -1,10 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DiscountArea from '../HomePage/DiscountArea'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTotals } from '../features/addToCart/addToCartSlice';
+import { usePostOrderMutation } from '../features/dataForm/createFormDataSlice';
 
 const ItemForm = () => {
+    const { mutate: postOrder, isLoading, isError } = usePostOrderMutation();
+    const dispatch = useDispatch();
+    const cart = useSelector((state) => state.addToCart);
+    console.log(cart, "checkout item");
+    useEffect(() => {
+        dispatch(getTotals());
+    }, [cart, dispatch]);
+    const [postData, setPostData] = useState({
+        first_name:"",
+        last_name:"",
+
+    })
+
+    const handleSubmit = async () => {
+        try {
+            const result = await postOrder(postData);
+            // Handle successful mutation
+            console.log('Order Posted:', result.data);
+        } catch (err) {
+            // Handle error
+            console.error('Error posting order:', err);
+        }
+    };
     return (
         <div>
-            <DiscountArea />
+            {/* <DiscountArea /> */}
             <div className="checkout_area section_padding_100">
                 <div className="container">
                     <div className="row">
@@ -14,15 +40,21 @@ const ItemForm = () => {
                                     <h5>Billing Address</h5>
                                     <p>Enter your coupons code</p>
                                 </div>
-                                <form action="#" method="post">
+                                <form onSubmit={handleSubmit}>
                                     <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="first_name">First Name <span>*</span></label>
-                                            <input type="text" className="form-control" id="first_name" defaultValue required />
+                                            <input type="text" className="form-control" id="first_name"
+                                             placeholder='First Name'
+                                             value={postData.first_name}
+                                            onChange={(e) => setPostData({ ...postData, first_name: e.target.value })}
+                                              required />
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="last_name">Last Name <span>*</span></label>
-                                            <input type="text" className="form-control" id="last_name" defaultValue required />
+                                            <input type="text" className="form-control" id="last_name"
+                                            value={postData.last_name}
+                                              required />
                                         </div>
                                         <div className="col-12 mb-3">
                                             <label htmlFor="company">Company Name</label>
@@ -90,13 +122,24 @@ const ItemForm = () => {
                                     <h5>Your Order</h5>
                                     <p>The Details</p>
                                 </div>
+
+                                <ul className="order-details-form mb-4">
+                                    <li><span>Product</span> <span>Total</span></li>
+                                    {cart?.cartItems.map((items) => (
+                                        <li><span>{items.sub_cat_name}</span> <span>{items.price}</span></li>
+                                    ))}
+                                    <li><span>Subtotal</span> <span>{cart?.cartTotalAmount}</span></li>
+                                    <li><span>Shipping</span> <span>{cart.shippingCharges}</span></li>
+                                    <li><span>Total</span> <span>{cart.cartTotalAmount + cart.shippingCharges}</span></li>
+                                </ul>
+                                {/*                                 
                                 <ul className="order-details-form mb-4">
                                     <li><span>Product</span> <span>Total</span></li>
                                     <li><span>Cocktail Yellow dress</span> <span>$59.90</span></li>
                                     <li><span>Subtotal</span> <span>$59.90</span></li>
                                     <li><span>Shipping</span> <span>Free</span></li>
                                     <li><span>Total</span> <span>$59.90</span></li>
-                                </ul>
+                                </ul> */}
                                 <div id="accordion" role="tablist" className="mb-4">
                                     <div className="card">
                                         <div className="card-header" role="tab" id="headingOne">
@@ -147,7 +190,7 @@ const ItemForm = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#" className="btn karl-checkout-b tn">Place Order</a>
+                                <a href="#" className="btn karl-checkout-b tn" onClick={handleSubmit}>Place Order</a>
                             </div>
                         </div>
                     </div>

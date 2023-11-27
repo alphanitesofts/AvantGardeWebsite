@@ -1,0 +1,21 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+const base_url = "https://avantgarde.alphanitesofts.net/api";
+
+export const api = createApi({
+ reducerPath: 'formData',
+ baseQuery: fetchBaseQuery({ baseUrl: base_url }),
+ endpoints: (builder) => ({
+    PostOrder: builder.mutation({
+        query: (data) => ({
+            url: 'post_order',
+            method: 'POST',
+            body: data
+        }),
+
+    })
+    
+
+ }),
+});
+
+export const { usePostOrderMutation } = api;
