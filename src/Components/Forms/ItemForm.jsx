@@ -1,90 +1,7 @@
-// import React, { useEffect, useState } from 'react'
+// import React from 'react'
 // import DiscountArea from '../HomePage/DiscountArea'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { getTotals } from '../features/addToCart/addToCartSlice';
-// import axios from 'axios';
-// import { useCreateOrderMutation } from '../features/dataForm/createFormDataSlice';
 
 // const ItemForm = () => {
-//     const dispatch = useDispatch();
-//     const {mutate:createOrder,isLoading,isError} = useCreateOrderMutation();
-//     const cart = useSelector((state) => state.addToCart);
-//     console.log(cart, "checkout item");
-//     useEffect(() => {
-//         dispatch(getTotals());
-//     }, [cart, dispatch]);
-//     const [postData, setPostData] = useState({
-//         total: cart.cartTotalAmount + cart.shippingCharges,
-//         sub_total: cart.cartTotalAmount,
-//         gst: 26.00,
-//         shipment_charges: cart.shippingCharges,
-//         delivery_method: `${cart.shippingCharges === 0 ? "Home Delivery" : "Personal Pickup"}`,
-//         shipping_address: "",
-//         promo_code: "",
-//         paid: "",
-//         status: "new",
-//         cod: "true",  // cash on delivery
-//         payment_method: "cod",
-//         vat: 26.00,
-//         order_data: cart.cartItems.map((item) => ({
-//           article_id: item._id,
-//           size: item.sub_datas[0].size,
-//           qty: item.cartQuantity,
-//           total_price: (item.price * item.cartQuantity) + cart.shippingCharges + 26.00,
-//           single_price: item.price,
-//           actual_single_price: item.price,
-//           on_sale: item.on_sale,
-//         })),
-//         billing_data: {
-//           first_name: "",
-//           last_name: "",
-//           phone: "",
-//           address: "",
-//           city: "",
-//           postcode: "",
-//           state: "",
-//         },
-//         contact_data: {
-//           phone: "",
-//           email: "",
-//         },
-//         shipping_data: {
-//           phone: "",
-//           address: "",
-//           city: "",
-//           postcode: "",
-//           state: "",
-//         },
-//       });
-
-//       const handleInputChange = (section, newData) => {
-//         setPostData((prevData) => ({
-//           ...prevData,
-//           [section]: {
-//             ...prevData[section],
-//             ...newData,
-//           },
-//         }));
-//       };
-
-//       const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         try {
-//           console.log("Sending data:", postData);
-//           const response = await axios.post('https://avantgarde.alphanitesofts.net/api/post_order', postData);
-//           console.log('Response:', response.data);
-//           // Optionally, you can handle the success response here
-//         } catch (err) {
-//           if (err.response) {
-//             console.log('Server responded with an error:', err.response.data);
-//           } else if (err.request) {
-//             console.log('No response received from the server');
-//           } else {
-//             console.log('Error setting up the request:', err.message);
-//           }
-//           // Optionally, you can handle the error here
-//         }
-//       };
 //     return (
 //         <div>
 //             {/* <DiscountArea /> */}
@@ -287,16 +204,16 @@
 
 
 import React, { useEffect, useState } from 'react'
-import DiscountArea from '../HomePage/DiscountArea'
+// import DiscountArea from '../HomePage/DiscountArea'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTotals } from '../features/addToCart/addToCartSlice';
 import axios from 'axios';
-import { useCreateOrderMutation } from '../features/dataForm/createFormDataSlice';
+// import { useCreateOrderMutation } from '../features/dataForm/createFormDataSlice';
 
 const ItemForm = () => {
     const dispatch = useDispatch();
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(''); // Add this state
-    const { mutate: createOrder, isLoading, isError } = useCreateOrderMutation();
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('cash on delivery'); // Add this state
+    // const { mutate: createOrder, isLoading, isError } = useCreateOrderMutation();
     const cart = useSelector((state) => state.addToCart);
     console.log(cart, "checkout item");
     useEffect(() => {
@@ -304,19 +221,10 @@ const ItemForm = () => {
     }, [cart, dispatch]);
 
     const handlePaymentMethodChange = (method) => {
+        console.log(method, "method");
         setSelectedPaymentMethod(method);
+        console.log(selectedPaymentMethod,"method")
     };
-    // const handleInputChange = (section, newData) => {
-    //     setPostData((prevData) => ({
-    //         ...prevData,
-    //         payment_method: selectedPaymentMethod,
-    //         [section]: {
-    //             ...prevData[section],
-    //             ...newData,
-    //         },
-    //     }));
-    // };
-
 
     const handleInputChange = (section, newData) => {
         if (section === 'billing_data') {
@@ -350,9 +258,9 @@ const ItemForm = () => {
         delivery_method: `${cart.shippingCharges === 0 ? "Home Delivery" : "Personal Pickup"}`,
         shipping_address: "",
         promo_code: "",
-        paid: `${selectedPaymentMethod=="cash on delievery"? false:true}`,
+        paid: `${selectedPaymentMethod==="cash on delievery"? false:true}`,
         status: "new",
-        cod: `${selectedPaymentMethod=="cash on delievery"? true: false}`,  // cash on delivery
+        cod: `${selectedPaymentMethod==="cash on delievery"? true: false}`,  // cash on delivery
         payment_method: `${selectedPaymentMethod}`,
         vat: 26.00,
         order_data: cart.cartItems.map((item) => ({
@@ -396,7 +304,7 @@ const ItemForm = () => {
             console.log("Sending data:", postData);
             const response = await axios.post('https://avantgarde.alphanitesofts.net/api/post_order', postData);
             console.log('Response:', response.data);
-            // Optionally, you can handle the success response here
+          
         } catch (err) {
             if (err.response) {
                 console.log('Server responded with an error:', err.response.data);
@@ -405,7 +313,6 @@ const ItemForm = () => {
             } else {
                 console.log('Error setting up the request:', err.message);
             }
-            // Optionally, you can handle the error here
         }
     };
     return (
@@ -543,13 +450,13 @@ const ItemForm = () => {
                                         <div className="card-header" role="tab" id="headingOne">
                                             <h6 className="mb-0">
                                                 <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"
-                                                    onClick={() => handlePaymentMethodChange('paypal')}>
-                                                    <i className="fa fa-circle-o mr-3" />Paypal</a>
+                                                    onClick={() => handlePaymentMethodChange('PAYFAST(Pay via Debit/Credit/Wallet/Bank Account)')}>
+                                                    <i className="fa fa-circle-o mr-3" />PAYFAST(Pay via Debit/Credit/Wallet/Bank Account)</a>
                                             </h6>
                                         </div>
                                         <div id="collapseOne" className="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                                             <div className="card-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales. Phasellus sagittis auctor gravida. Integ er bibendum sodales arcu id te mpus. Ut consectetur lacus.</p>
+                                                <p>After clicking “Pay now”, you will be redirected to<br/> PAYFAST(Pay via Debit/Credit/Wallet/Bank Account) <br /> to complete your purchase securely.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -563,7 +470,7 @@ const ItemForm = () => {
                                         </div>
                                         <div id="collapseTwo" className="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                                             <div className="card-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quis in veritatis officia inventore, tempore provident dignissimos.</p>
+                                                <p>Pay cash on delivery.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -577,11 +484,11 @@ const ItemForm = () => {
                                         </div>
                                         <div id="collapseThree" className="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                                             <div className="card-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse quo sint repudiandae suscipit ab soluta delectus voluptate, vero vitae</p>
+                                                <p>Make your payment directly into our bank account. Please email a screenshot for proof of payment along with your order number at info@avantgardeoriginal.com. Your order will not be shipped until the funds have cleared in our account.</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="card">
+                                    {/* <div className="card">
                                         <div className="card-header" role="tab" id="headingFour">
                                             <h6 className="mb-0">
                                                 <a className="collapsed" data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour"
@@ -594,7 +501,7 @@ const ItemForm = () => {
                                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est cum autem eveniet saepe fugit, impedit magni.</p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <button className="btn karl-checkout-b tn" type='submit' onClick={handleSubmit} >Place Order</button>
                             </div>

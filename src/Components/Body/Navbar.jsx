@@ -8,6 +8,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const cart =useSelector((state)=>state.addToCart)
     const {cartTotalQuantity}=cart
+    console.log('cartTotalQuantity:', cartTotalQuantity);
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);

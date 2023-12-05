@@ -17,16 +17,12 @@ const Cart = () => {
                 return 0;
         }
     };
-    console.log(calculateShippingCharges(),'fgfg')
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.addToCart);
-    console.log(cart, "cart item");
     const total = cart.cartTotalAmount + calculateShippingCharges();
-    console.log(total,"total");
     const calculatedShippingCharges = calculateShippingCharges(); 
     useEffect(() => {
         dispatch(getTotals());
-        console.log('Calculated shipping charges:', calculatedShippingCharges);
     dispatch(setShippingCharges(calculatedShippingCharges));
     }, [cart, dispatch,calculateShippingCharges,shippingMethod]);
 

@@ -1,10 +1,11 @@
 // SliderComponent.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { useGetArticlesQuery } from '../../features/articles/getArticlesApi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem,updateQuantity } from '../../features/addToCart/addToCartSlice';
+import ItemInfo from '../../Modals/ItemInfo';
 const imageUrl = 'https://avantgardeimages.alphanitesofts.net/';
 
 
@@ -12,6 +13,8 @@ const imageUrl = 'https://avantgardeimages.alphanitesofts.net/';
 const SliderComponent = ({ id }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [selectedProduct, setSelectedProduct] = useState();
+    const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
     const handleAddToCart = (product) => {
         dispatch(addItem(product));
@@ -21,10 +24,17 @@ const SliderComponent = ({ id }) => {
     let articles;
     let slides = [];
     const handleProductClick = (item) => {
-        // Navigate to the product description page with the corresponding product data
         navigate(`/product-description/${item.id}`);
     };
-    let sectionTitle // Provide a default title
+    const quickViewProduct = (id) => {
+        setSelectedProduct(id);
+        setIsQuickViewOpen(true);
+    };
+    useEffect(() => {
+        console.log(selectedProduct, 'selected product changed');
+    }, [selectedProduct]);
+      
+    let sectionTitle 
     if (articlesData) {
         articles = articlesData.data.filter((item) => item.sub_categorys_id === id);
         sectionTitle = articles[0].cat_name ? articles[0].cat_name : sectionTitle;
@@ -40,7 +50,8 @@ const SliderComponent = ({ id }) => {
                                 <img src="img/product-img/product-1.jpg" alt="" style={{ height: "320px" }} />
                             )}
                             <div className="product-quicview">
-                                <a href="/Quickview" data-toggle="modal" data-target="#quickview"><i className="ti-plus" /></a>
+                                <a data-toggle="modal" data-target="#quickview" onClick={()=>quickViewProduct(item)}>
+                                    <i className="ti-plus" /></a>
                             </div>
                         </div>
                         <div className="product-description">
@@ -131,6 +142,11 @@ const SliderComponent = ({ id }) => {
                     </Slider>
                 </div>
             </div>
+            {isQuickViewOpen && (
+                <ItemInfo product={selectedProduct} onClose={() => setIsQuickViewOpen(false)} />
+            )}
+            
+            {/* {selectedProduct && <ItemInfo selectedProduct={selectedProduct} />} */}
         </section>
     );
 };
